@@ -5,7 +5,7 @@
 # JetBrains IDE settings
 .idea/
 # Visual Studio Code settings
-.vscode/
+# .vscode/
 # Theia IDE settings
 .theia/
 
