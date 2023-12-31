@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "name": "debug_backend.py",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/debug/debug_backend.py",
+            "justMyCode": false
+        },
+        {
+            "name": "debug_deepspeed.py",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/debug/debug_deepspeed.py",
+            "justMyCode": false
+        }
+    ]
+}
