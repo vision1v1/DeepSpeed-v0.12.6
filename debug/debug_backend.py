@@ -36,7 +36,7 @@ def test_backend(rank, world_size):
     print_mp_info()
 
     def env_init_method():
-        os.environ['MASTER_ADDR'] = "localhost"
+        os.environ['MASTER_ADDR'] = "127.0.0.1"
         os.environ['MASTER_PORT'] = '29500'
         return "env://"
     
@@ -46,7 +46,7 @@ def test_backend(rank, world_size):
     def file_init_method():
         return "file://./sharedfile"
     
-    dist.init_process_group(backend="gloo", # "<device>:<backend>" 例如 "cpu:gloo"
+    dist.init_process_group(backend="nccl", # "<device>:<backend>" 例如 "cpu:gloo"
                             init_method=env_init_method(),
                             # init_method=tcp_init_method(),
                             # init_method=file_init_method(),
@@ -71,7 +71,7 @@ def test_spawn_1():
 
 
 def test_spawn_2():
-    size = 2
+    size = 1
     processes = []
     mp.set_start_method("spawn")
     for rank in range(size):
@@ -85,6 +85,6 @@ def test_spawn_2():
 
 if __name__ == "__main__":
     check()
-    test_spawn_1()
-    # test_spawn_2()
+    # test_spawn_1()
+    test_spawn_2()
     

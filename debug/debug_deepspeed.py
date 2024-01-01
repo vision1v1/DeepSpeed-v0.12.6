@@ -17,7 +17,7 @@ def test_initialize():
 
 
 if __name__ == "__main__":
-    # test_init_distributed()
+    test_init_distributed()
     # test_initialize()
     print("finished...")
     ...
