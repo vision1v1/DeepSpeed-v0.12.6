@@ -87,8 +87,6 @@ def test_spawn_2():
 
 if __name__ == "__main__":
     check()
-    print_mp_info()
-    print_dist_info()
-    # test_spawn_1()
-    # test_spawn_2()
+    test_spawn_1()
+    test_spawn_2()
     
