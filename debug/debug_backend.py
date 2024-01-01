@@ -64,11 +64,9 @@ def test_backend(rank, world_size):
 
 
 def test_spawn_1():
-    world_size = 1
-    for rank in range(world_size):
-        mp.spawn(test_backend, args=(world_size,), nprocs=world_size, join=True) # rank 会自动添加
-
-
+    world_size = 2
+    # 产生world_size个进程
+    mp.spawn(test_backend, args=(world_size,), nprocs=world_size, join=True) # rank 会自动添加
     print("finished...")
 
 
@@ -88,5 +86,5 @@ def test_spawn_2():
 if __name__ == "__main__":
     check()
     test_spawn_1()
-    test_spawn_2()
+    # test_spawn_2()
     
