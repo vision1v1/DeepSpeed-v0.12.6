@@ -1,3 +1,4 @@
 {
-    "python.defaultInterpreterPath": "D:/common_program/miniconda3/envs/glm/python.exe"
+    // "python.defaultInterpreterPath": "D:/common_program/miniconda3/envs/glm/python.exe"
+    "python.defaultInterpreterPath": "/root/miniconda3/bin/python3.8"
 }
