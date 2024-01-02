@@ -1,0 +1,46 @@
+{
+    "folders": [
+        {
+            "path": ".."
+        }
+    ],
+    "settings": {
+        "workbench.colorCustomizations": {
+			"editorLineNumber.foreground": "#00ff91",
+			"scrollbarSlider.activeBackground": "#10f308af",
+        	"scrollbarSlider.hoverBackground": "#10f308af",
+        	"scrollbarSlider.background":"#d9ff00"
+		},
+        "workbench.editorAssociations": {
+			"*.md":"vscode.markdown.preview.editor" // markdown 文档默认预览打开
+		},
+
+        "python.defaultInterpreterPath": "/root/miniconda3/bin/python3.8",
+        "[python]": {
+            "editor.defaultFormatter": "ms-python.autopep8",
+            "editor.formatOnSave": false
+        },
+        "editor.minimap.enabled": false,
+        "explorer.autoReveal": false,
+    },
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "debug_backend.py",
+                "type": "python",
+                "request": "launch",
+                "program": "${workspaceFolder}/debug/debug_backend.py",
+                "justMyCode": false
+            },
+            {
+                "name": "debug_deepspeed.py",
+                "type": "python",
+                "request": "launch",
+                "program": "${workspaceFolder}/debug/debug_deepspeed.py",
+                "justMyCode": false
+            }
+        ],
+        "compounds": []
+    }
+}
