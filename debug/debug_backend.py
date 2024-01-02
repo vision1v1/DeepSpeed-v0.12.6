@@ -71,7 +71,7 @@ def test_spawn_1():
 
 
 def test_spawn_2():
-    size = 1
+    size = 2 # 后端为nccl时，必须要2个gpu，否则报错。
     processes = []
     mp.set_start_method("spawn")
     for rank in range(size):
