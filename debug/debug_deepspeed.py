@@ -2,7 +2,7 @@ import deepspeed
 import torch
 from torch import nn
 import dataclasses
-from torch.utils.data import Dataset, TensorDataset, IterableDataset
+from torch.utils.data import Dataset, TensorDataset, IterableDataset, DataLoader
 from torch.optim.lr_scheduler import LinearLR
 
 def test_init_distributed():
@@ -43,11 +43,11 @@ def test_initialize():
     
     print("training...")
 
-class SimpleDataset(IterableDataset):
+class SimpleDataset(Dataset):
 
     def __init__(self) -> None:
         super().__init__()
-        self.data = [torch.randint(0, 10, size=(1, 6)) for i in range(2)]
+        self.data = [torch.randn(size=(6,)) for i in range(10)]
 
     def __getitem__(self, index):
         return self.data[index]
@@ -55,9 +55,6 @@ class SimpleDataset(IterableDataset):
     def __len__(self):
         return len(self.data)
     
-    def __bool__(self):
-        """Deepspeed 要求的，还不清楚为什么"""
-        return True
     
 def ds_config_2():
     """
@@ -145,8 +142,7 @@ def test_train():
     args.local_rank = 0
     args.deepscale_config = ds_config_1()
     total_iters = 10
-    # training_data = SimpleDataset() # TODO 自己扩展的数据集，bool(training_data) 为 False，这导致返回的training_dataloader为None。
-    training_data = TensorDataset(*[torch.randint(0, 10, size=(6, )) for i in range(2)])
+    training_data = SimpleDataset() # TODO 自己扩展的数据集，bool(training_data) 为 False，这导致返回的training_dataloader为None。
     model = nn.Linear(in_features=6, out_features=5)
     # optimizer = 
     # lr_scheduler = LinearLR(optimizer=optimizer, start_factor=1, end_factor=0.1, total_iters=total_iters)
@@ -165,7 +161,7 @@ def test_train():
 
     for step, batch in enumerate(training_dataloader):
         #forward() method
-        loss = model_engine.forward(*batch)
+        loss = model_engine.forward(batch)
 
         #runs backpropagation
         model_engine.backward(loss)
@@ -175,11 +171,24 @@ def test_train():
 
     ...
 
+def test_pytorch_train():
 
+    model = nn.Linear(in_features=6, out_features=5)
+    dataset = SimpleDataset()
+    dataloader = DataLoader(dataset=dataset, batch_size=3, shuffle=False)
+
+    if dataset:
+        print("dataset 有数据")
+
+    for batch in dataloader:
+        output = model.forward(batch)
+        print(output)
+    ...
 
 if __name__ == "__main__":
     # test_init_distributed()
     # test_initialize()
-    test_train()
+    # test_train()
+    test_pytorch_train()
     print("finished...")
     ...
