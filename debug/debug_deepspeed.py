@@ -45,9 +45,9 @@ def test_initialize():
 
 class SimpleDataset(Dataset):
 
-    def __init__(self) -> None:
+    def __init__(self, device, dtype) -> None:
         super().__init__()
-        self.data = [torch.randn(size=(6,)) for i in range(10)]
+        self.data = [torch.randn(size=(6,), device=device, dtype=dtype) for i in range(10)]
 
     def __getitem__(self, index):
         return self.data[index]
@@ -140,9 +140,13 @@ def test_train():
 
     args = Args()
     args.local_rank = 0
+    args.num_gpus = 1
+    args.num_nodes = 1
     args.deepscale_config = ds_config_1()
     total_iters = 10
-    training_data = SimpleDataset() # TODO 自己扩展的数据集，bool(training_data) 为 False，这导致返回的training_dataloader为None。
+    # 提前在某个gpu设备上创建Tensor，后面训练可能会报错
+    # 在ds_config_1 开启了float16的精度。所以这里也要设置成相同精度
+    training_data = SimpleDataset(torch.device('cpu'), dtype=torch.float16) 
     model = nn.Linear(in_features=6, out_features=5)
     # optimizer = 
     # lr_scheduler = LinearLR(optimizer=optimizer, start_factor=1, end_factor=0.1, total_iters=total_iters)
@@ -160,11 +164,12 @@ def test_train():
     print("train...")
 
     for step, batch in enumerate(training_dataloader):
+        batch = batch.to(model_engine.device)
         #forward() method
-        loss = model_engine.forward(batch)
+        loss = model_engine.forward(batch) # 这里就是模型的输出，即 nn.Linear 的输出
 
         #runs backpropagation
-        model_engine.backward(loss)
+        model_engine.backward(loss.sum()) # 为计算梯度转成标量
 
         #weight update
         model_engine.step()
@@ -186,6 +191,7 @@ def test_pytorch_train():
     ...
 
 if __name__ == "__main__":
+    # deepspeed --num_nodes=1 --num_gpus=1 ./debug_deepspeed.py # 需要熟悉deepspeed启动 用法
     # test_init_distributed()
     # test_initialize()
     test_train()
