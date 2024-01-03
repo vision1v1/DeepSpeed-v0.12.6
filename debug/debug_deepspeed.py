@@ -188,7 +188,7 @@ def test_pytorch_train():
 if __name__ == "__main__":
     # test_init_distributed()
     # test_initialize()
-    # test_train()
-    test_pytorch_train()
+    test_train()
+    # test_pytorch_train()
     print("finished...")
     ...
